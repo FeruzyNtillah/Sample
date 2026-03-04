@@ -3,6 +3,8 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+import { Sidebar } from '@/components/shared/Sidebar';
+import { Toaster } from 'sonner';
 
 export default function DashboardLayout({
   children,
@@ -34,5 +36,17 @@ export default function DashboardLayout({
     return null;
   }
 
-  return <div className="min-h-screen bg-background">{children}</div>;
+  return (
+    <div className="flex min-h-screen bg-[#0d1117]">
+      <Sidebar />
+      
+      <main className="ml-[280px] flex-1 flex flex-col min-h-screen">
+        <div className="flex-1 overflow-y-auto p-8">
+          {children}
+        </div>
+      </main>
+      
+      <Toaster richColors position="top-right" />
+    </div>
+  );
 }
