@@ -1,0 +1,25 @@
+.kpiCard {
+  flex: 1;
+  border-radius: 0.75rem;
+  border: 1px solid #21262d;
+  background-color: #161b22;
+  padding: 1.25rem;
+}
+
+.label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  margin-bottom: 0.5rem;
+}
+
+.value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: white;
+}
+
+.value.red {
+  color: #ef4444;
+}
