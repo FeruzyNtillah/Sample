@@ -1,0 +1,22 @@
+.lifecycleBar {
+  display: flex;
+  gap: 0.125rem;
+}
+
+.stageIndicator {
+  width: 18px;
+  height: 8px;
+  border-radius: 0.125rem;
+}
+
+.stageIndicator.completed {
+  background-color: #22c55e;
+}
+
+.stageIndicator.current {
+  background-color: #f97316;
+}
+
+.stageIndicator.future {
+  background-color: #374151;
+}

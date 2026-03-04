@@ -1,24 +1,91 @@
-interface DataTableProps<T> {
-  data: T[];
-  columns: {
-    key: keyof T;
-    header: string;
-    render?: (value: any, item: T) => React.ReactNode;
-  }[];
+import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { EmptyState } from './EmptyState';
+
+export interface ColumnDef<T = unknown> {
+  key: string;
+  header: string;
+  accessor: (row: T) => React.ReactNode;
   className?: string;
 }
 
-export default function DataTable<T>({ data, columns, className }: DataTableProps<T>) {
+interface PaginationProps {
+  total: number;
+  page: number;
+  pageSize: number;
+  onPageChange: (page: number) => void;
+  onPageSizeChange: (size: number) => void;
+}
+
+interface DataTableProps<T = unknown> {
+  columns: ColumnDef<T>[];
+  data: T[];
+  isLoading?: boolean;
+  emptyTitle?: string;
+  emptySubtitle?: string;
+  pagination?: PaginationProps;
+}
+
+export function DataTable<T = unknown>({
+  columns,
+  data,
+  isLoading,
+  emptyTitle = 'No data available',
+  emptySubtitle = 'There are no items to display',
+  pagination
+}: DataTableProps<T>) {
+  const startItem = pagination ? (pagination.page - 1) * pagination.pageSize + 1 : 1;
+  const endItem = pagination ? Math.min(startItem + pagination.pageSize - 1, pagination.total) : data.length;
+
+  if (isLoading) {
+    return (
+      <div className="w-full">
+        <div className="border border-[#21262d] rounded-lg overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-[#161b22] border-b border-[#21262d]">
+                {columns.map((column) => (
+                  <th
+                    key={column.key}
+                    className="px-3.5 py-3 text-left text-xs font-medium text-gray-400 uppercase"
+                  >
+                    {column.header}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: 5 }).map((_, index) => (
+                <tr key={index} className="border-b border-[#21262d]">
+                  {columns.map((column) => (
+                    <td key={column.key} className="px-3.5 py-3.5">
+                      <div className="h-4 bg-gray-700 rounded animate-pulse"></div>
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <EmptyState
+        title={emptyTitle}
+        subtitle={emptySubtitle}
+      />
+    );
+  }
+
   return (
-    <div className={`overflow-x-auto ${className}`}>
-      <table className="w-full border-collapse">
-        <thead>
-          <tr className="border-b border-border">
-            {columns.map((column) => (
-              <th
-                key={String(column.key)}
-                className="text-left py-3 px-4 font-medium text-sm text-muted-foreground"
-              >
+    <div className="w-full">
+      <div className="border border-[#21262d] rounded-lg overflow-hidden">
+        <table className="w-full">
+          <thead>
+            <tr className="bg-[#161b22] border-b border-[#21262d]">
                 {column.header}
               </th>
             ))}
