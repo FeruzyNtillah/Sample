@@ -86,30 +86,72 @@ export function DataTable<T = unknown>({
         <table className="w-full">
           <thead>
             <tr className="bg-[#161b22] border-b border-[#21262d]">
-                {column.header}
-              </th>
-            ))}
-          </tr>
-        </thead>
+              {columns.map((column) => (
+                <th
+                  key={column.key}
+                  className="px-3.5 py-3 text-left text-xs font-medium text-gray-400 uppercase"
+                >
+                  {column.header}
+                </th>
+              ))}
+            </tr>
+          </thead>
         <tbody>
           {data.map((item, index) => (
-            <tr key={index} className="border-b border-border hover:bg-muted/50">
+            <tr key={index} className="border-b border-[#21262d] hover:bg-[#1c2128]">
               {columns.map((column) => (
                 <td key={String(column.key)} className="py-3 px-4 text-sm">
-                  {column.render
-                    ? column.render(item[column.key], item)
-                    : String(item[column.key] || '')}
+                  {column.accessor(item)}
                 </td>
               ))}
             </tr>
           ))}
         </tbody>
       </table>
-      {data.length === 0 && (
-        <div className="text-center py-8 text-muted-foreground">
-          No data available
+      {pagination && (
+        <div className="flex items-center justify-between px-4 py-3 border-t border-[#21262d]">
+          <div className="text-sm text-gray-400">
+            Showing {startItem} to {endItem} of {pagination.total} results
+          </div>
+          <div className="flex items-center gap-2">
+            <select
+              value={pagination.pageSize}
+              onChange={(e) => pagination.onPageSizeChange(Number(e.target.value))}
+              className="bg-[#161b22] border border-[#21262d] text-white px-2 py-1 rounded text-sm"
+              aria-label="Select page size"
+              title="Select page size"
+            >
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => pagination.onPageChange(pagination.page - 1)}
+                disabled={pagination.page === 1}
+                className="p-1 rounded hover:bg-[#1c2128] disabled:opacity-50"
+                aria-label="Previous page"
+                title="Previous page"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+              <span className="text-sm text-gray-400 px-2">
+                Page {pagination.page}
+              </span>
+              <button
+                onClick={() => pagination.onPageChange(pagination.page + 1)}
+                disabled={endItem >= pagination.total}
+                className="p-1 rounded hover:bg-[#1c2128] disabled:opacity-50"
+                aria-label="Next page"
+                title="Next page"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
         </div>
       )}
+    </div>
     </div>
   );
 }

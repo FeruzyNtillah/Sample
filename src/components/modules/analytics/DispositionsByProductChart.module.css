@@ -1,0 +1,15 @@
+.tooltipText {
+  color: var(--tooltip-color, inherit);
+}
+
+.sold {
+  color: #1e4d6b;
+}
+
+.recycled {
+  color: #5eead4;
+}
+
+.other {
+  color: #64748b;
+}
