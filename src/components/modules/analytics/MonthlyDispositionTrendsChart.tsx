@@ -11,7 +11,17 @@ interface MonthlyDispositionTrendsChartProps {
   isLoading: boolean
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+interface TooltipProps {
+  active?: boolean
+  payload?: Array<{
+    name: string
+    value: number
+    color: string
+  }>
+  label?: string
+}
+
+const CustomTooltip = ({ active, payload, label }: TooltipProps) => {
   if (active && payload && payload.length) {
     const colorClassMap: Record<string, string> = {
       sold: styles.sold,
@@ -21,7 +31,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
     return (
       <div className="bg-[#1c2128] border border-[#21262d] rounded-lg p-3">
         <p className="text-white font-medium mb-2">{label}</p>
-        {payload.map((entry: any, index: number) => (
+        {payload.map((entry, index: number) => (
           <p
             key={index}
             className={`text-sm ${styles.tooltipText} ${colorClassMap[entry.name] || ''}`}

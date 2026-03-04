@@ -63,7 +63,7 @@ export const getSuppliersApi = async () => {
 }
 
 // GET /status (submission status page)
-export const getSubmissionStatusApi = async (params?: {
+export const getStatusPageApi = async (params?: {
   reportType?: string
   status?: string
   page?: number

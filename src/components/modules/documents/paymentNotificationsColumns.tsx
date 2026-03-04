@@ -6,9 +6,9 @@ export const paymentNotificationsColumns = [
   {
     key: 'notificationId',
     label: 'Notification ID',
-    render: (value: string) => (
+    render: (value: unknown, row: Record<string, unknown>) => (
       <span className="font-mono text-sm">
-        {truncateId(value)}
+        {truncateId(value as string)}
       </span>
     )
   },
@@ -31,13 +31,13 @@ export const paymentNotificationsColumns = [
   {
     key: 'status',
     label: 'Status',
-    render: (value: string) => (
-      <StatusBadge status={value} />
+    render: (value: unknown, row: Record<string, unknown>) => (
+      <StatusBadge status={value as string} />
     )
   },
   {
     key: 'createdAt',
     label: 'Created',
-    render: (value: string) => formatDate(value)
+    render: (value: unknown, row: Record<string, unknown>) => formatDate(value as string)
   }
 ]

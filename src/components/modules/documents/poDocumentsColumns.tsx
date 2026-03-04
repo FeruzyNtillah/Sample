@@ -5,8 +5,8 @@ export const poDocumentsColumns = [
   {
     key: 'poNumber',
     label: 'PO Number',
-    render: (value: string) => (
-      <span className="font-medium">{value}</span>
+    render: (value: unknown, row: Record<string, unknown>) => (
+      <span className="font-medium">{value as string}</span>
     )
   },
   {
@@ -32,8 +32,8 @@ export const poDocumentsColumns = [
   {
     key: 'status',
     label: 'Status',
-    render: (value: string) => (
-      <StatusBadge status={value} />
+    render: (value: unknown, row: Record<string, unknown>) => (
+      <StatusBadge status={value as string} />
     )
   }
 ]
