@@ -1,24 +1,47 @@
-export interface Import {
+export interface ImportSession {
   id: string;
-  importId: string;
-  type: 'collection' | 'disposition' | 'invoice_details' | 'transport' | 'material_audit';
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  reportType: string;
   fileName: string;
-  uploadedAt: string;
-  processedAt?: string;
-  totalRecords: number;
-  processedRecords?: number;
-  failedRecords?: number;
-  errors?: string[];
-  uploadedBy: string;
+  status: string;
+  rows: number;
+  errors: number;
+  jobId?: string;
+  submittedAt?: string;
+  createdAt: string;
 }
 
-export interface ImportRequest {
-  type: Import['type'];
-  file: File;
+export interface ImportValidationResult {
+  id: string;
+  valid: boolean;
+  errors: ValidationError[];
+  warnings: ValidationWarning[];
+  rows: number;
 }
 
-export interface ImportResponse {
-  import: Import;
+export interface ValidationError {
+  row: number;
+  column: string;
   message: string;
+  value?: string;
+}
+
+export interface ValidationWarning {
+  row: number;
+  column: string;
+  message: string;
+}
+
+export interface ImportPreview {
+  id: string;
+  headers: string[];
+  rows: Record<string, unknown>[];
+  payload: Record<string, unknown>;
+}
+
+export interface ImportsFilter {
+  reportType?: string;
+  status?: string;
+  search?: string;
+  page?: number;
+  pageSize?: number;
 }
