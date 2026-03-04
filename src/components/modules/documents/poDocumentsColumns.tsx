@@ -5,7 +5,8 @@ export const poDocumentsColumns = [
   {
     key: 'poNumber',
     label: 'PO Number',
-    render: (value: unknown, row: Record<string, unknown>) => (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    render: (value: unknown, _row: Record<string, unknown>) => (
       <span className="font-medium">{value as string}</span>
     )
   },
@@ -32,7 +33,8 @@ export const poDocumentsColumns = [
   {
     key: 'status',
     label: 'Status',
-    render: (value: unknown, row: Record<string, unknown>) => (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    render: (value: unknown, _row: Record<string, unknown>) => (
       <StatusBadge status={value as string} />
     )
   }

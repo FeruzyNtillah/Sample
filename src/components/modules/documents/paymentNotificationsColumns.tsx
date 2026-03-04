@@ -6,7 +6,8 @@ export const paymentNotificationsColumns = [
   {
     key: 'notificationId',
     label: 'Notification ID',
-    render: (value: unknown, row: Record<string, unknown>) => (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    render: (value: unknown, _row: Record<string, unknown>) => (
       <span className="font-mono text-sm">
         {truncateId(value as string)}
       </span>
@@ -31,13 +32,15 @@ export const paymentNotificationsColumns = [
   {
     key: 'status',
     label: 'Status',
-    render: (value: unknown, row: Record<string, unknown>) => (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    render: (value: unknown, _row: Record<string, unknown>) => (
       <StatusBadge status={value as string} />
     )
   },
   {
     key: 'createdAt',
     label: 'Created',
-    render: (value: unknown, row: Record<string, unknown>) => formatDate(value as string)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    render: (value: unknown, _row: Record<string, unknown>) => formatDate(value as string)
   }
 ]

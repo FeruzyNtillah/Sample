@@ -5,7 +5,8 @@ export const invoiceDocumentsColumns = [
   {
     key: 'invoiceNumber',
     label: 'Invoice Number',
-    render: (value: unknown, row: Record<string, unknown>) => (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    render: (value: unknown, _row: Record<string, unknown>) => (
       <span className="font-medium">{value as string}</span>
     )
   },
@@ -36,7 +37,8 @@ export const invoiceDocumentsColumns = [
   {
     key: 'status',
     label: 'Status',
-    render: (value: unknown, row: Record<string, unknown>) => (
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    render: (value: unknown, _row: Record<string, unknown>) => (
       <StatusBadge status={value as string} />
     )
   }
