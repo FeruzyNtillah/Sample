@@ -8,10 +8,59 @@ import { StatusBadge } from '@/components/shared/StatusBadge'
 import { StageBadge } from '@/components/shared/StageBadge'
 import { LifecycleBar } from '@/components/shared/LifecycleBar'
 import { DataTable, ColumnDef } from '@/components/shared/DataTable'
-import { useJob } from '@/hooks/useJobs'
-import { getImportsByJobApi } from '@/lib/api/imports'
-import { getRequestsByJobApi } from '@/lib/api/requests'
-import { useQuery } from '@tanstack/react-query'
+
+// Mock data
+const mockJob = {
+  id: 'job-123456789',
+  supplierJobId: 'SUP-001',
+  type: 'Recycling',
+  supplier: 'Microsoft Corp',
+  status: 'active',
+  stage: 'disposition',
+  units: 150,
+  createdAt: '2024-01-10',
+  updatedAt: '2024-01-15'
+}
+
+const mockImports = [
+  {
+    id: 'import-1',
+    reportType: 'Disposition',
+    filename: 'disposition_report.xlsx',
+    status: 'completed',
+    rows: 150,
+    submittedAt: '2024-01-12',
+    createdAt: '2024-01-11'
+  },
+  {
+    id: 'import-2',
+    reportType: 'Collection',
+    filename: 'collection_data.csv',
+    status: 'processing',
+    rows: 75,
+    submittedAt: null,
+    createdAt: '2024-01-13'
+  }
+]
+
+const mockRequests = [
+  {
+    id: 'req-1',
+    endpoint: '/api/v1/dispositions',
+    supplierId: 'SUP-001',
+    status: 'success',
+    retries: 0,
+    createdAt: '2024-01-12'
+  },
+  {
+    id: 'req-2',
+    endpoint: '/api/v1/invoices',
+    supplierId: 'SUP-001',
+    status: 'failed',
+    retries: 2,
+    createdAt: '2024-01-13'
+  }
+]
 
 interface ImportSession {
   id: string
@@ -33,44 +82,10 @@ interface Request {
 }
 
 export default function JobDetailPage({ params }: { params: { id: string } }) {
-  const { data: job, error: jobError } = useJob(params.id)
+  const job = mockJob
+  const imports = { items: mockImports }
+  const requests = { items: mockRequests }
 
-  const { data: imports, isLoading: importsLoading } = useQuery({
-    queryKey: ['job-imports', params.id],
-    queryFn: () => getImportsByJobApi({ jobId: params.id }),
-    enabled: !!params.id,
-  })
-
-  const { data: requests, isLoading: requestsLoading } = useQuery({
-    queryKey: ['job-requests', params.id],
-    queryFn: () => getRequestsByJobApi({ jobId: params.id }),
-    enabled: !!params.id,
-  })
-
-  if (jobError) {
-    return (
-      <div className="space-y-6">
-        <Link 
-          href="/jobs"
-          className="flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to Jobs
-        </Link>
-        <div className="bg-[#161b22] border border-[#21262d] rounded-xl p-6 text-center">
-          <h2 className="text-lg font-semibold text-white mb-2">Job not found</h2>
-          <p className="text-gray-400 mb-4">The job you&apos;re looking for doesn&apos;t exist or has been removed.</p>
-          <Link 
-            href="/jobs"
-            className="inline-flex items-center gap-2 px-4 py-2 border border-gray-600 text-gray-300 rounded-lg hover:bg-gray-800 transition-colors"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Jobs
-          </Link>
-        </div>
-      </div>
-    )
-  }
 
   const importColumns: ColumnDef<ImportSession>[] = [
     {
@@ -273,8 +288,8 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
         </div>
         <DataTable
           columns={importColumns}
-          data={imports?.items ?? []}
-          isLoading={importsLoading}
+          data={imports.items}
+          isLoading={false}
           emptyTitle="No imports found"
           emptySubtitle="There are no imports related to this job"
         />
@@ -288,8 +303,8 @@ export default function JobDetailPage({ params }: { params: { id: string } }) {
         </div>
         <DataTable
           columns={requestColumns}
-          data={requests?.items ?? []}
-          isLoading={requestsLoading}
+          data={requests.items}
+          isLoading={false}
           emptyTitle="No requests found"
           emptySubtitle="There are no API requests related to this job"
         />

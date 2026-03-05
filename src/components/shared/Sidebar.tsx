@@ -17,11 +17,9 @@ import {
   ChevronRight,
   Shield,
   User,
-  LogOut,
   Moon,
   X,
 } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
 
 interface NavItem {
   label: string;
@@ -76,7 +74,6 @@ const navigationGroups: NavGroup[] = [
 export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: SidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const { user, logout } = useAuth();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(true);
 
@@ -87,13 +84,6 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
     return pathname.startsWith(href);
   };
 
-  const handleSignOut = () => {
-    logout();
-    setIsProfileOpen(false);
-    if (setIsMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
-    }
-  };
 
   const handleNavigation = (href: string) => {
     router.push(href);
@@ -162,7 +152,7 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
               </div>
               <div className="flex-1 text-left">
                 <div className="text-white font-semibold text-sm">Admin</div>
-                <div className="text-gray-400 text-xs">{user?.email}</div>
+                <div className="text-gray-400 text-xs">admin@example.com</div>
               </div>
               <ChevronRight size={16} className="text-gray-400" />
             </button>
@@ -209,13 +199,6 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
                 >
                   <Settings size={16} className="text-gray-400" />
                   <span className="text-sm text-gray-300">Settings</span>
-                </button>
-                <button
-                  onClick={handleSignOut}
-                  className="w-full flex items-center gap-2 p-2 rounded hover:bg-[#0d1117] transition-colors"
-                >
-                  <LogOut size={16} className="text-red-400" />
-                  <span className="text-sm text-red-400">Sign out</span>
                 </button>
               </div>
             )}
@@ -303,7 +286,7 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
                 </div>
                 <div className="flex-1 text-left">
                   <div className="text-white font-semibold text-sm">Admin</div>
-                  <div className="text-gray-400 text-xs">{user?.email}</div>
+                  <div className="text-gray-400 text-xs">admin@example.com</div>
                 </div>
                 <ChevronRight size={16} className="text-gray-400" />
               </button>
@@ -352,13 +335,6 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
                   >
                     <Settings size={16} className="text-gray-400" />
                     <span className="text-sm text-gray-300">Settings</span>
-                  </button>
-                  <button
-                    onClick={handleSignOut}
-                    className="w-full flex items-center gap-2 p-2 rounded hover:bg-[#0d1117] transition-colors"
-                  >
-                    <LogOut size={16} className="text-red-400" />
-                    <span className="text-sm text-red-400">Sign out</span>
                   </button>
                 </div>
               )}

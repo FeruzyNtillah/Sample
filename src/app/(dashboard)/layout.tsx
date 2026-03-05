@@ -1,8 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
+import { useState } from 'react';
 import { Sidebar } from '@/components/shared/Sidebar';
 import { Toaster } from 'sonner';
 import { Menu } from 'lucide-react';
@@ -12,31 +10,7 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { isAuthenticated, isLoading, initialize } = useAuth();
-  const router = useRouter();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
-
-  useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.push('/login');
-    }
-  }, [isAuthenticated, isLoading, router]);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#5eead4]"></div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return null;
-  }
 
   return (
     <div className="flex min-h-screen bg-[#0d1117]">

@@ -5,13 +5,18 @@ import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { User, Lock, Eye, EyeOff } from 'lucide-react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { toast } from 'sonner'
-import { useAuth } from '@/hooks/useAuth'
 import { PageHeader } from '@/components/shared/PageHeader'
 import { LoadingSpinner } from '@/components/shared/LoadingSpinner'
-import { getErrorMessage, getInitials, checkPasswordStrength, getPasswordStrengthProps } from '@/lib/helpers'
-import api from '@/lib/axios'
+import { getInitials, checkPasswordStrength, getPasswordStrengthProps } from '@/lib/helpers'
+
+// Mock user data
+const mockUser = {
+  id: '1',
+  name: 'Admin User',
+  email: 'admin@example.com',
+  role: 'admin',
+  status: 'active'
+}
 
 // Profile update schema
 const updateProfileSchema = z.object({
@@ -33,11 +38,11 @@ type UpdateProfileFormData = z.infer<typeof updateProfileSchema>
 type ChangePasswordFormData = z.infer<typeof changePasswordSchema>
 
 export default function ProfilePage() {
-  const { user } = useAuth()
-  const queryClient = useQueryClient()
+  const user = mockUser
   const [showCurrentPassword, setShowCurrentPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+  const [isUpdating, setIsUpdating] = useState(false)
 
   // Profile update form
   const {
@@ -74,45 +79,22 @@ export default function ProfilePage() {
   const passwordStrength = newPassword ? checkPasswordStrength(newPassword) : null
   const passwordStrengthProps = passwordStrength ? getPasswordStrengthProps(passwordStrength) : null
 
-  // Profile update mutation
-  const updateProfileMutation = useMutation({
-    mutationFn: async (data: UpdateProfileFormData) => {
-      const response = await api.put('/auth/profile', data)
-      return response.data
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['auth'] })
-      toast.success('Profile updated successfully')
-    },
-    onError: (error) => {
-      toast.error(getErrorMessage(error))
-    }
-  })
 
-  // Password change mutation
-  const changePasswordMutation = useMutation({
-    mutationFn: async (data: ChangePasswordFormData) => {
-      const response = await api.put('/auth/change-password', {
-        currentPassword: data.currentPassword,
-        newPassword: data.newPassword
-      })
-      return response.data
-    },
-    onSuccess: () => {
-      resetPassword()
-      toast.success('Password changed successfully')
-    },
-    onError: (error) => {
-      toast.error(getErrorMessage(error))
-    }
-  })
-
-  const onProfileSubmit = (data: UpdateProfileFormData) => {
-    updateProfileMutation.mutate(data)
+  const onProfileSubmit = () => {
+    setIsUpdating(true)
+    setTimeout(() => {
+      setIsUpdating(false)
+      alert('Profile updated (mock)')
+    }, 1500)
   }
 
-  const onPasswordSubmit = (data: ChangePasswordFormData) => {
-    changePasswordMutation.mutate(data)
+  const onPasswordSubmit = () => {
+    setIsUpdating(true)
+    setTimeout(() => {
+      setIsUpdating(false)
+      resetPassword()
+      alert('Password changed (mock)')
+    }, 1500)
   }
 
   const getRoleBadgeClass = (role: string) => {
@@ -128,13 +110,6 @@ export default function ProfilePage() {
     }
   }
 
-  if (!user) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <LoadingSpinner size="lg" />
-      </div>
-    )
-  }
 
   return (
     <div className="space-y-6">
@@ -210,10 +185,10 @@ export default function ProfilePage() {
 
           <button
             type="submit"
-            disabled={updateProfileMutation.isPending}
+            disabled={isUpdating}
             className="px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
-            {updateProfileMutation.isPending && <LoadingSpinner size="sm" />}
+            {isUpdating && <LoadingSpinner size="sm" />}
             Save Changes
           </button>
         </form>
@@ -314,10 +289,10 @@ export default function ProfilePage() {
 
           <button
             type="submit"
-            disabled={changePasswordMutation.isPending}
+            disabled={isUpdating}
             className="px-6 py-2 bg-cyan-600 text-white rounded-lg hover:bg-cyan-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
-            {changePasswordMutation.isPending && <LoadingSpinner size="sm" />}
+            {isUpdating && <LoadingSpinner size="sm" />}
             Update Password
           </button>
         </form>

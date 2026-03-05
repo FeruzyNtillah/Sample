@@ -1,15 +1,12 @@
 'use client';
 
 import { Bell } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
 
 interface HeaderProps {
   title: string;
 }
 
 export function Header({ title }: HeaderProps) {
-  const { user } = useAuth();
-
   return (
     <header className="h-[60px] bg-[#0d1117] border-b border-[#21262d] flex items-center justify-between px-6">
       <h1 className="text-lg font-semibold text-white">{title}</h1>
@@ -24,9 +21,7 @@ export function Header({ title }: HeaderProps) {
         </button>
         
         <div className="w-8 h-8 bg-[#1e3a5f] rounded-full flex items-center justify-center">
-          <span className="text-white text-sm font-bold">
-            {user?.name?.charAt(0).toUpperCase() || 'A'}
-          </span>
+          <span className="text-white text-sm font-bold">A</span>
         </div>
       </div>
     </header>
