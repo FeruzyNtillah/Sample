@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import api from '../lib/axios';
 import { getErrorMessage } from '../lib/helpers';
-import type { AuthState, LoginRequest, User, AuthResponse } from '../types/auth';
+import type { AuthState, LoginRequest, User } from '../types/auth';
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -14,9 +13,45 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (credentials: LoginRequest) => {
         set({ isLoading: true });
+        
+        // Mock authentication for development
         try {
-          const response = await api.post<AuthResponse>('/auth/login', credentials);
-          const { token, user } = response.data;
+          // Simulate API delay
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          
+          // Mock user database
+          const mockUsers = {
+            'admin@example.com': {
+              password: 'admin123',
+              user: {
+                id: '1',
+                name: 'Admin User',
+                email: 'admin@example.com',
+                role: 'admin',
+                status: 'active'
+              },
+              token: 'mock-admin-token-12345'
+            },
+            'viewer@example.com': {
+              password: 'viewer123',
+              user: {
+                id: '2',
+                name: 'Viewer User',
+                email: 'viewer@example.com',
+                role: 'viewer',
+                status: 'active'
+              },
+              token: 'mock-viewer-token-67890'
+            }
+          };
+
+          const mockUser = mockUsers[credentials.email as keyof typeof mockUsers];
+          
+          if (!mockUser || mockUser.password !== credentials.password) {
+            throw new Error('Invalid email or password');
+          }
+
+          const { token, user } = mockUser;
 
           // Store token in localStorage
           localStorage.setItem('auth_token', token);
@@ -32,7 +67,7 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (error) {
           set({ isLoading: false });
-          // Throw a more descriptive error using the helper
+          // Throw a more descriptive error using helper
           if (error instanceof Error) {
             throw new Error(getErrorMessage(error));
           } else {
@@ -76,15 +111,35 @@ export const useAuthStore = create<AuthState>()(
         if (token) {
           set({ token, isAuthenticated: true, isLoading: true });
           
-          // Attempt to fetch current user
-          api.get<User>('/auth/me')
-            .then((response) => {
-              set({ user: response.data, isLoading: false });
-            })
-            .catch(() => {
-              // If fetching user fails, clear invalid token
+          // Mock user validation for development
+          setTimeout(() => {
+            if (token === 'mock-admin-token-12345') {
+              set({ 
+                user: {
+                  id: '1',
+                  name: 'Admin User',
+                  email: 'admin@example.com',
+                  role: 'admin',
+                  status: 'active'
+                }, 
+                isLoading: false 
+              });
+            } else if (token === 'mock-viewer-token-67890') {
+              set({ 
+                user: {
+                  id: '2',
+                  name: 'Viewer User',
+                  email: 'viewer@example.com',
+                  role: 'viewer',
+                  status: 'active'
+                }, 
+                isLoading: false 
+              });
+            } else {
+              // Invalid token, clear it
               get().logout();
-            });
+            }
+          }, 500);
         } else {
           set({ isLoading: false });
         }

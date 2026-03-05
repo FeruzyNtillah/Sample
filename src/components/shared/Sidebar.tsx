@@ -43,32 +43,32 @@ const navigationGroups: NavGroup[] = [
   {
     label: 'MAIN',
     items: [
-      { label: 'Dashboard', href: '/', icon: <LayoutDashboard size={18} /> },
-      { label: 'Jobs', href: '/jobs', icon: <Briefcase size={18} /> },
-      { label: 'Invoice Documents', href: '/invoice-documents', icon: <FileText size={18} /> },
-      { label: 'PO Documents', href: '/po-documents', icon: <Monitor size={18} /> },
-      { label: 'Payment Notifications', href: '/payment-notifications', icon: <CircleDollarSign size={18} /> },
+      { label: 'Dashboard', href: '/dashboard', icon: <LayoutDashboard size={18} /> },
+      { label: 'Jobs', href: '/dashboard/jobs', icon: <Briefcase size={18} /> },
+      { label: 'Invoice Documents', href: '/dashboard/invoice-documents', icon: <FileText size={18} /> },
+      { label: 'PO Documents', href: '/dashboard/po-documents', icon: <Monitor size={18} /> },
+      { label: 'Payment Notifications', href: '/dashboard/payment-notifications', icon: <CircleDollarSign size={18} /> },
     ],
   },
   {
     label: 'OPERATIONS',
     items: [
-      { label: 'Status', href: '/status', icon: <Activity size={18} /> },
-      { label: 'Imports', href: '/imports', icon: <FolderDown size={18} /> },
-      { label: 'Requests', href: '/requests', icon: <AlignLeft size={18} /> },
+      { label: 'Status', href: '/dashboard/status', icon: <Activity size={18} /> },
+      { label: 'Imports', href: '/dashboard/imports', icon: <FolderDown size={18} /> },
+      { label: 'Requests', href: '/dashboard/requests', icon: <AlignLeft size={18} /> },
     ],
   },
   {
     label: 'ANALYTICS',
     items: [
-      { label: 'Executive KPI', href: '/dashboards/kpi', icon: <BarChart2 size={18} /> },
-      { label: 'Reporting SLA', href: '/dashboards/sla', icon: <Timer size={18} /> },
+      { label: 'Executive KPI', href: '/dashboard/dashboards/kpi', icon: <BarChart2 size={18} /> },
+      { label: 'Reporting SLA', href: '/dashboard/dashboards/sla', icon: <Timer size={18} /> },
     ],
   },
   {
     label: 'ADMIN',
     items: [
-      { label: 'Settings', href: '/settings', icon: <Settings size={18} /> },
+      { label: 'Settings', href: '/dashboard/settings', icon: <Settings size={18} /> },
     ],
   },
 ];
@@ -81,8 +81,8 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
   const [darkMode, setDarkMode] = useState(true);
 
   const isActive = (href: string) => {
-    if (href === '/') {
-      return pathname === '/';
+    if (href === '/dashboard') {
+      return pathname === '/dashboard' || pathname === '/';
     }
     return pathname.startsWith(href);
   };
@@ -192,7 +192,7 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
                 <div className="border-t border-[#21262d] my-2"></div>
                 <button
                   onClick={() => {
-                    router.push('/profile');
+                    router.push('/dashboard/profile');
                     setIsProfileOpen(false);
                   }}
                   className="w-full flex items-center gap-2 p-2 rounded hover:bg-[#0d1117] transition-colors"
@@ -202,7 +202,7 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
                 </button>
                 <button
                   onClick={() => {
-                    router.push('/settings');
+                    router.push('/dashboard/settings');
                     setIsProfileOpen(false);
                   }}
                   className="w-full flex items-center gap-2 p-2 rounded hover:bg-[#0d1117] transition-colors"
@@ -333,7 +333,7 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
                   <div className="border-t border-[#21262d] my-2"></div>
                   <button
                     onClick={() => {
-                      router.push('/profile');
+                      router.push('/dashboard/profile');
                       setIsProfileOpen(false);
                       if (setIsMobileMenuOpen) setIsMobileMenuOpen(false);
                     }}
@@ -344,7 +344,7 @@ export function Sidebar({ isMobileMenuOpen = false, setIsMobileMenuOpen }: Sideb
                   </button>
                   <button
                     onClick={() => {
-                      router.push('/settings');
+                      router.push('/dashboard/settings');
                       setIsProfileOpen(false);
                       if (setIsMobileMenuOpen) setIsMobileMenuOpen(false);
                     }}

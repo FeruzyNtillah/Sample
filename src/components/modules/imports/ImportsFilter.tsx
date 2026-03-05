@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { ChevronDown, Search } from 'lucide-react'
 import { REPORT_TYPES } from '@/lib/constants'
 import { formatReportType } from '@/lib/formatters'
-import { useDebounce } from '@/hooks/useDebounce'
+import { useDebouncedCallback } from '@/hooks/useDebouncedCallback'
 
 interface ImportsFilterProps {
   reportType: string
@@ -21,7 +21,13 @@ export function ImportsFilter({
   onStatusChange, 
   onSearchChange 
 }: ImportsFilterProps) {
-  const debouncedSearchChange = useDebounce(onSearchChange, 300)
+  const [localSearch, setLocalSearch] = useState(search)
+  const debouncedSearchChange = useDebouncedCallback((value: string) => onSearchChange(value), 300)
+
+  // Update local search when prop changes
+  React.useEffect(() => {
+    setLocalSearch(search)
+  }, [search])
 
   return (
     <div className="flex gap-4 mb-6 flex-wrap">
@@ -77,8 +83,11 @@ export function ImportsFilter({
           <input
             type="text"
             placeholder="File name, job id, or import id"
-            defaultValue={search}
-            onChange={(e) => debouncedSearchChange(e.target.value)}
+            value={localSearch}
+            onChange={(e) => {
+              setLocalSearch(e.target.value)
+              debouncedSearchChange(e.target.value)
+            }}
             className="min-w-[300px] pl-10 pr-[14px] py-[10px] bg-[#161b22] border border-[#21262d] text-white rounded-lg focus:outline-none focus:border-[#30363d] focus:ring-1 focus:ring-[#1f6feb] placeholder-gray-500"
           />
         </div>
