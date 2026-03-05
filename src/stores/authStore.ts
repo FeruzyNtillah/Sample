@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import api from '../lib/axios';
+import { getErrorMessage } from '../lib/helpers';
 import type { AuthState, LoginRequest, User, AuthResponse } from '../types/auth';
 
 export const useAuthStore = create<AuthState>()(
@@ -31,7 +32,12 @@ export const useAuthStore = create<AuthState>()(
           });
         } catch (error) {
           set({ isLoading: false });
-          throw error;
+          // Throw a more descriptive error using the helper
+          if (error instanceof Error) {
+            throw new Error(getErrorMessage(error));
+          } else {
+            throw new Error('An unknown error occurred');
+          }
         }
       },
 
