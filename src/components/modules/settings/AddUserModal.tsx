@@ -136,7 +136,7 @@ export function AddUserModal({ isOpen, onClose, onSuccess }: AddUserModalProps) 
               className="w-full px-3 py-2 bg-[#0d1117] border border-[#374151] rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
             >
               <option value="">Select a role</option>
-              {roles.map((role) => (
+              {roles.map((role: string) => (
                 <option key={role} value={role}>
                   {role.charAt(0).toUpperCase() + role.slice(1)}
                 </option>

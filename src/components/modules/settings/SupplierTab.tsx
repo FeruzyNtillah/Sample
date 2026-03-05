@@ -98,7 +98,7 @@ export function SupplierTab() {
         <div className="space-y-2 text-sm text-gray-300">
           <p><span className="font-medium">Supplier ID:</span> Unique identifier for each supplier.</p>
           <p><span className="font-medium">Status:</span> Whether the supplier&apos;s account is currently active.</p>
-          <p><span className="font-medium">Country:</span> Supplier's registered country.</p>
+          <p><span className="font-medium">Country:</span> Supplier&apos;s registered country.</p>
         </div>
       </div>
     </div>
